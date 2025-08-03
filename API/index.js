@@ -4,9 +4,11 @@ import multer from 'multer';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import cors from 'cors'; 
 dotenv.config();
 
 const app = express();
+app.use(cors()); 
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Listar archivos de una ruta
@@ -121,4 +123,4 @@ app.delete('/recursos/eliminar', express.json(), async (req, res) => {
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`API escuchando en puerto ${PORT}`);
-}); 
+});
