@@ -27,8 +27,16 @@ app.get('/recursos/:ruta(*)', async (req, res) => {
 app.post('/recursos/:ruta(*)', upload.single('archivo'), async (req, res) => {
   const { ruta } = req.params;
   const file = req.file;
+
   if (!file) return res.status(400).json({ error: 'No se envió archivo' });
-  const fullPath = ruta ? `${ruta}/${file.originalname}` : file.originalname;
+
+  // Sanitizar nombre de archivo
+  const sanitized = file.originalname
+    .normalize('NFD') // Quita acentos
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9._-]/g, '-');
+
+  const fullPath = ruta ? `${ruta}/${sanitized}` : sanitized;
   const { data, error } = await supabase
     .storage
     .from('recursos')

@@ -1,0 +1,345 @@
+[
+  {
+    "codigo": "CII-2401",
+    "nombre": "Mecánica de fluidos"
+  },
+  {
+    "codigo": "CII-2751",
+    "nombre": "Inferencia estadística"
+  },
+  {
+    "codigo": "CII-1001",
+    "nombre": "Teoría organizacional"
+  },
+  {
+    "codigo": "CII-2402",
+    "nombre": "Termodinámica"
+  },
+  {
+    "codigo": "CII-2755",
+    "nombre": "Modelos estocásticos"
+  },
+  {
+    "codigo": "CII-2101",
+    "nombre": "Microeconomía"
+  },
+  {
+    "codigo": "CII-2002",
+    "nombre": "Ingeniería económica"
+  },
+  {
+    "codigo": "CII-2656",
+    "nombre": "Econometría"
+  },
+  {
+    "codigo": "CII-2403",
+    "nombre": "Proyetos energéticos"
+  },
+  {
+    "codigo": "CII-2253",
+    "nombre": "Producción"
+  },
+  {
+    "codigo": "CII-2102",
+    "nombre": "Marketing"
+  },
+  {
+    "codigo": "CII-2003",
+    "nombre": "Finanzas"
+  },
+  {
+    "codigo": "CII-2504",
+    "nombre": "Data Science"
+  },
+  {
+    "codigo": "CII-2757",
+    "nombre": "Simulación"
+  },
+  {
+    "codigo": "CII-2254",
+    "nombre": "Logística"
+  },
+  {
+    "codigo": "CII-2103",
+    "nombre": "Gestión estrategica"
+  },
+  {
+    "codigo": "CII-2250",
+    "nombre": "Estática - Industrial"
+  },
+  {
+    "codigo": "CII-2501",
+    "nombre": "Bases de datos"
+  },
+  {
+    "codigo": "CII-2104",
+    "nombre": "Evaluación de proyectos"
+  },
+  {
+    "codigo": "CII-3101",
+    "nombre": "Liderazgo y emprendimiento"
+  },
+
+
+
+
+
+
+
+
+  {
+    "codigo": "CIT-1010",
+    "nombre": "Programación avanzada"
+  },
+  {
+    "codigo": "CIT-2107",
+    "nombre": "Electrónica y electrotecnia"
+  },
+  {
+    "codigo": "CIT-2006",
+    "nombre": "Estructura de Datos y Algoritmos"
+  },
+  {
+    "codigo": "CIT-2007",
+    "nombre": "Bases de Datos"
+  },
+  {
+    "codigo": "CIT-2114",
+    "nombre": "Redes de Datos"
+  },
+  {
+    "codigo": "CIT-2008",
+    "nombre": "Desarrollo web y móvil"
+  },
+  {
+    "codigo": "CIT-2009",
+    "nombre": "Bases de Datos Avanzadas"
+  },
+  {
+    "codigo": "CIT-2108",
+    "nombre": "Taller de Redes y Servicios"
+  },
+  {
+    "codigo": "CIT-2205",
+    "nombre": "Proyectos en TICS I"
+  },
+  {
+    "codigo": "CIT-2109",
+    "nombre": "Arquitectura y Organización de Computadores"
+  },
+  {
+    "codigo": "CIT-2110",
+    "nombre": "Señales y Sistemas"
+  },
+  {
+    "codigo": "CIT-2010",
+    "nombre": "Sistemas Operativos"
+  },
+  {
+    "codigo": "CIT-2206",
+    "nombre": "Gestión Organizacional"
+  },
+  {
+    "codigo": "CIT-2011",
+    "nombre": "Sistemas Distribuidos"
+  },
+  {
+    "codigo": "CIT-2111",
+    "nombre": "Comunicaciones Digitales"
+  },
+  {
+    "codigo": "CIT-2012",
+    "nombre": "Ingeniería de Software"
+  },
+  {
+    "codigo": "CIT-2112",
+    "nombre": "Tecnologías Inalámbricas"
+  },
+  {
+    "codigo": "CIT-2113",
+    "nombre": "Criptografía y Seguridad en Redes"
+  },
+  {
+    "codigo": "CIT-2013",
+    "nombre": "Inteligencia Artificial"
+  },
+  {
+    "codigo": "CIT-2207",
+    "nombre": "Evaluación de Proyectos TIC"
+  },
+  {
+    "codigo": "CIT-3000",
+    "nombre": "Arquitectura de Software"
+  },
+  {
+    "codigo": "CIT-3100",
+    "nombre": "Arquitecturas Emergentes"
+  },
+  {
+    "codigo": "CIT-3202",
+    "nombre": "Data Science"
+  },
+  {
+    "codigo": "CIT-2204",
+    "nombre": "Probabilidad y estadística"
+  },
+
+
+
+
+
+  {
+    "codigo": "COC-2001",
+    "nombre": "Ingeniería de materiales"
+  },
+  {
+    "codigo": "COC-2200",
+    "nombre": "Mecánica de fluidos"
+  },
+  {
+    "codigo": "COC-2101",
+    "nombre": "Mecánica de Sólidos"
+  },
+  {
+    "codigo": "COC-2002",
+    "nombre": "Edificación"
+  },
+  {
+    "codigo": "COC-2201",
+    "nombre": "Hidráulica"
+  },
+  {
+    "codigo": "COC-2102",
+    "nombre": "Análisis estructural"
+  },
+  {
+    "codigo": "COC-2203",
+    "nombre": "Ingeniería ambiental"
+  },
+  {
+    "codigo": "COC-2003",
+    "nombre": "Tecnología del hormigón"
+  },
+  {
+    "codigo": "COC-2103",
+    "nombre": "Diseño estructural"
+  },
+  {
+    "codigo": "COC-2104",
+    "nombre": "Mecánica de Suelos"
+  },
+  {
+    "codigo": "COC-2204",
+    "nombre": "Hidrología"
+  },
+  {
+    "codigo": "COC-2004",
+    "nombre": "Administración de Proyectos Civiles"
+  },
+  {
+    "codigo": "COC-2105",
+    "nombre": "Diseño en Hormigón"
+  },
+  {
+    "codigo": "COC-2106",
+    "nombre": "Fundaciones"
+  },
+  {
+    "codigo": "COC-2205",
+    "nombre": "Hidráulica urbana"
+  },
+  {
+    "codigo": "COC-2005",
+    "nombre": "Planificación de Proyectos"
+  },
+  {
+    "codigo": "COC-2107",
+    "nombre": "Diseño en Acero"
+  },
+  {
+    "codigo": "COC-3100",
+    "nombre": "Ingeniería Sísmica"
+  },
+  {
+    "codigo": "COC-3000",
+    "nombre": "Ingeniería de Costos"
+  },
+  {
+    "codigo": "COC-3001",
+    "nombre": "Diseño de Caminos"
+  },
+  {
+    "codigo": "COC-2100",
+    "nombre": "Estática - Obras Civiles"
+  },
+  {
+    "codigo": "CBE-2000",
+    "nombre": "Probabilidad y estadística - Industrial"
+  },
+
+
+
+
+
+
+  {
+    "codigo": "CBM-1000",
+    "nombre": "Álgebra y geometría"
+  },
+  {
+    "codigo": "CBM-1001",
+    "nombre": "Cálculo I"
+  },
+  {
+    "codigo": "CBQ-1000",
+    "nombre": "Química"
+  },
+  {
+    "codigo": "CIT-1000",
+    "nombre": "Programación"
+  },
+  {
+    "codigo": "FIC-1000",
+    "nombre": "Comunicación para la ingeniería"
+  },
+  {
+    "codigo": "CBM-1002",
+    "nombre": "Álgebra lineal"
+  },
+  {
+    "codigo": "CBM-1003",
+    "nombre": "Cálculo II"
+  },
+  {
+    "codigo": "CBF-1000",
+    "nombre": "Mecánica"
+  },
+  {
+    "codigo": "CBM-1005",
+    "nombre": "Ecuaciones diferenciales"
+  },
+  {
+    "codigo": "CBM-1006",
+    "nombre": "Cálculo III"
+  },
+  {
+    "codigo": "CBF-1001",
+    "nombre": "Calor y ondas"
+  },
+  {
+    "codigo": "CBF-1002",
+    "nombre": "Electricidad y magnetismo"
+  },
+  {
+    "codigo": "CII-2750",
+    "nombre": "Optimización"
+  },
+  {
+    "codigo": "CII-2100",
+    "nombre": "Introducción a la economía"
+  },
+  {
+    "codigo": "CII-1000",
+    "nombre": "Contabilidad y costos"
+  }
+]
