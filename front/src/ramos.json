@@ -79,9 +79,10 @@
     "codigo": "CII-3101",
     "nombre": "Liderazgo y emprendimiento"
   },
-
-
-
+  {
+    "codigo": "CBE-2000",
+    "nombre": "Probabilidad y estadística - Industrial"
+  },
 
 
 
@@ -272,12 +273,6 @@
     "codigo": "COC-2100",
     "nombre": "Estática - Obras Civiles"
   },
-  {
-    "codigo": "CBE-2000",
-    "nombre": "Probabilidad y estadística - Industrial"
-  },
-
-
 
 
 

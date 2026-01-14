@@ -12,17 +12,17 @@
 - **Tecnologías:**  
   - [Astro](https://astro.build/) (framework web moderno)
   - [Vercel](https://vercel.com/) (hosting)
-  - [Supabase Storage](https://supabase.com/) (almacenamiento de archivos)
+  - [Cloudflare R2](https://developers.cloudflare.com/r2/) (almacenamiento de archivos)
 - **Ubicación:**  
   Carpeta [`epauta`](epauta/)
 
 ### 2. API
 - **¿Qué es?**  
-  Es una API RESTful que administra los archivos y recursos de la plataforma, permitiendo listar, subir, eliminar y renombrar archivos en Supabase Storage.
+  Es una API RESTful que administra los archivos y recursos de la plataforma, permitiendo listar, subir, eliminar y renombrar archivos en Cloudflare R2.
 - **Tecnologías:**  
   - [Node.js](https://nodejs.org/)
   - [Express](https://expressjs.com/)
-  - [Supabase JS](https://supabase.com/docs/reference/javascript/introduction)
+  - [AWS SDK S3](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/) (compatible con Cloudflare R2)
   - [Multer](https://github.com/expressjs/multer) (subida de archivos)
   - [CORS](https://github.com/expressjs/cors)
   - [dotenv](https://github.com/motdotla/dotenv)
@@ -42,19 +42,19 @@
 
 ## ¿Cómo funciona todo en conjunto?
 
-1. **Usuarios** acceden a [epauta.vercel.app](https://epauta.vercel.app) para buscar y descargar material académico. El sitio obtiene la lista de archivos desde Supabase Storage usando el SDK de Supabase.
+1. **Usuarios** acceden a [epauta.vercel.app](https://epauta.vercel.app) para buscar y descargar material académico. El sitio obtiene la lista de archivos desde Cloudflare R2 usando el SDK de AWS S3.
 2. **Administradores** usan el frontend de gestión (Front) para subir, eliminar o renombrar archivos de cada curso.  
-3. El **frontend de administración** se comunica con la **API** (Node.js/Express), que a su vez realiza las operaciones sobre Supabase Storage.
-4. **Supabase Storage** es el repositorio central de todos los archivos, accesible tanto desde la web pública como desde la API de administración.
+3. El **frontend de administración** se comunica con la **API** (Node.js/Express), que a su vez realiza las operaciones sobre Cloudflare R2.
+4. **Cloudflare R2** es el repositorio central de todos los archivos, accesible tanto desde la web pública como desde la API de administración.
 
 ---
 
 ## Diagrama de flujo
 
 ```
-[Administrador] --(React Front)--> [API Express] --(SDK)--> [Supabase Storage]
-      ^                                                      |
-      |                                                      v
-[Usuario] <-------------------(Astro Web)-------------------> [Supabase Storage]
+[Administrador] --(React Front)--> [API Express] --(AWS SDK)--> [Cloudflare R2]
+      ^                                                          |
+      |                                                          v
+[Usuario] <-------------------(Astro Web)----------------------> [Cloudflare R2]
 ```
 

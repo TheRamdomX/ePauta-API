@@ -3,6 +3,49 @@ import ramos from './ramos.json';
 
 const API_URL = 'http://localhost:3001';
 
+// Función para determinar la carrera basándose en el código del ramo
+function getCarrera(codigo) {
+  if (!codigo) return null;
+  const codigoUpper = codigo.toUpperCase();
+  
+  // Códigos que pertenecen a plan-comun (ciencias básicas y comunes)
+  if (codigoUpper.startsWith('CBM-') || // Matemáticas básicas
+      codigoUpper.startsWith('CBF-') || // Física básica
+      codigoUpper.startsWith('CBQ-') || // Química básica
+      codigoUpper.startsWith('CBE-') || // Estadística básica
+      codigoUpper.startsWith('FIC-') || // Comunicación
+      codigoUpper === 'CIT-1000' ||      // Programación (plan común)
+      codigoUpper === 'CII-2750' ||      // Optimización (plan común)
+      codigoUpper === 'CII-2100' ||      // Intro economía (plan común)
+      codigoUpper === 'CII-1000') {      // Contabilidad (plan común)
+    return 'plan-comun';
+  }
+  
+  // Ingeniería Industrial (CII-)
+  if (codigoUpper.startsWith('CII-')) {
+    return 'eii';
+  }
+  
+  // Ingeniería en Informática y Telecomunicaciones (CIT-)
+  if (codigoUpper.startsWith('CIT-')) {
+    return 'eit';
+  }
+  
+  // Ingeniería en Obras Civiles (COC-)
+  if (codigoUpper.startsWith('COC-')) {
+    return 'eoc';
+  }
+  
+  return null;
+}
+
+// Función para construir la ruta completa
+function getRutaCompleta(codigo) {
+  const carrera = getCarrera(codigo);
+  if (!carrera) return codigo;
+  return `${carrera}/${codigo.toUpperCase()}`;
+}
+
 function App() {
   const [curso, setCurso] = useState('');
   const [archivos, setArchivos] = useState([]);
@@ -17,12 +60,17 @@ function App() {
     return found ? found.nombre : '';
   })();
 
+  // Obtener la carrera del curso actual
+  const carreraActual = getCarrera(curso);
+  const rutaCompleta = getRutaCompleta(curso);
+
   // Consultar archivos del curso
   const consultarArchivos = async () => {
     setCargando(true);
     setArchivos([]);
     try {
-      const res = await fetch(`${API_URL}/recursos/${curso}`);
+      const ruta = getRutaCompleta(curso);
+      const res = await fetch(`${API_URL}/recursos/${ruta}`);
       const data = await res.json();
       setArchivos(data || []);
     } catch (e) {
@@ -35,10 +83,11 @@ function App() {
   const renombrarArchivo = async (nombre) => {
     const nombreNuevo = nuevoNombre[nombre];
     if (!nombreNuevo) return alert('Ingresa el nuevo nombre');
+    const ruta = getRutaCompleta(curso);
     await fetch(`${API_URL}/recursos/renombrar`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ curso, nombreActual: nombre, nombreNuevo }),
+      body: JSON.stringify({ curso: ruta, nombreActual: nombre, nombreNuevo }),
     });
     setNuevoNombre({ ...nuevoNombre, [nombre]: '' });
   };
@@ -46,10 +95,11 @@ function App() {
   // Eliminar archivo
   const eliminarArchivo = async (nombre) => {
     if (!window.confirm(`¿Eliminar ${nombre}?`)) return;
+    const ruta = getRutaCompleta(curso);
     await fetch(`${API_URL}/recursos/eliminar`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ curso, nombreArchivo: nombre }),
+      body: JSON.stringify({ curso: ruta, nombreArchivo: nombre }),
     });
     consultarArchivos();
   };
@@ -72,7 +122,8 @@ function App() {
     if (!file) return;
     const formData = new FormData();
     formData.append('archivo', file);
-    await fetch(`${API_URL}/recursos/${curso}`, {
+    const ruta = getRutaCompleta(curso);
+    await fetch(`${API_URL}/recursos/${ruta}`, {
       method: 'POST',
       body: formData,
     });
@@ -82,15 +133,33 @@ function App() {
   // Subir varios archivos (como carpeta)
   const subirCarpeta = async (e) => {
     const files = Array.from(e.target.files);
+    const ruta = getRutaCompleta(curso);
     for (const file of files) {
       const formData = new FormData();
       formData.append('archivo', file);
-      await fetch(`${API_URL}/recursos/${curso}`, {
+      await fetch(`${API_URL}/recursos/${ruta}`, {
         method: 'POST',
         body: formData,
       });
     }
     consultarArchivos();
+  };
+
+  // Seleccionar un curso desde la lista
+  const seleccionarCurso = (codigo) => {
+    setCurso(codigo);
+    setMostrarLista(false);
+    // Consultar archivos automáticamente después de un breve delay para que se actualice el estado
+    setTimeout(() => {
+      const ruta = getRutaCompleta(codigo);
+      setCargando(true);
+      setArchivos([]);
+      fetch(`${API_URL}/recursos/${ruta}`)
+        .then(res => res.json())
+        .then(data => setArchivos(data || []))
+        .catch(() => alert('Error al consultar archivos'))
+        .finally(() => setCargando(false));
+    }, 100);
   };
 
   // Manejar selección de checkbox
@@ -156,14 +225,28 @@ function App() {
             fontSize: 15,
           }}
         >
-          <b>Todos los cursos:</b>
+          <b>Todos los cursos (click en código para buscar):</b>
           <ul style={{ columns: 2, margin: 0, padding: 0, listStyle: 'none' }}>
             {ramos.map(r => (
               <li key={r.codigo || r.nombre} style={{ marginBottom: 4 }}>
-                <span style={{ fontFamily: 'monospace', color: '#333' }}>
-                  {r.codigo ? `${r.codigo} — ` : ''}
+                {r.codigo ? (
+                  <span
+                    onClick={() => seleccionarCurso(r.codigo)}
+                    style={{
+                      fontFamily: 'monospace',
+                      color: '#0066cc',
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
+                      marginRight: 4,
+                    }}
+                    title={`Buscar archivos de ${r.codigo}`}
+                  >
+                    {r.codigo}
+                  </span>
+                ) : null}
+                <span style={{ color: '#333' }}>
+                  {r.codigo ? ' — ' : ''}{r.nombre}
                 </span>
-                {r.nombre}
               </li>
             ))}
           </ul>
@@ -172,6 +255,11 @@ function App() {
       {curso && (
         <div style={{ marginBottom: 8, color: '#444', fontWeight: 'bold', fontSize: 18 }}>
           {nombreCurso ? `Curso: ${nombreCurso}` : 'Curso no encontrado'}
+          {carreraActual && (
+            <span style={{ fontSize: 14, fontWeight: 'normal', marginLeft: 12, color: '#666' }}>
+              (Carrera: {carreraActual})
+            </span>
+          )}
         </div>
       )}
       <hr />
