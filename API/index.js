@@ -58,9 +58,13 @@ app.get('/archivo/:ruta(*)', async (req, res) => {
     
     const response = await r2Client.send(command);
     
+    // Obtener el nombre del archivo de la ruta
+    const nombreArchivo = ruta.split('/').pop();
+    
     // Configurar headers para la descarga
     res.setHeader('Content-Type', response.ContentType || 'application/octet-stream');
     res.setHeader('Content-Length', response.ContentLength);
+    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(nombreArchivo)}"`);
     
     // Enviar el stream del archivo
     response.Body.pipe(res);

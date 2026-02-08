@@ -104,6 +104,25 @@ function App() {
     consultarArchivos();
   };
 
+  // Descargar archivo
+  const descargarArchivo = async (nombre) => {
+    const ruta = getRutaCompleta(curso);
+    const res = await fetch(`${API_URL}/archivo/${ruta}/${nombre}`);
+    if (res.ok) {
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombre;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } else {
+      alert('Error al descargar archivo');
+    }
+  };
+
   // Renombrar archivos seleccionados
   const renombrarSeleccionados = async () => {
     const archivosARenombrar = archivos.filter(a => seleccionados[a.name]);
@@ -314,6 +333,12 @@ function App() {
                 onClick={() => eliminarArchivo(archivo.name)}
               >
                 Eliminar
+              </button>
+              <button
+                style={{ marginLeft: 8 }}
+                onClick={() => descargarArchivo(archivo.name)}
+              >
+                Descargar
               </button>
             </li>
           ))}
