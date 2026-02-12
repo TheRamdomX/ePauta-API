@@ -162,7 +162,7 @@ app.patch('/recursos/renombrar', express.json(), async (req, res) => {
     // Copiar el archivo al nuevo nombre
     const copyCommand = new CopyObjectCommand({
       Bucket: bucketName,
-      CopySource: `${bucketName}/${srcPath}`,
+      CopySource: encodeURIComponent(`${bucketName}/${srcPath}`),
       Key: destPath,
     });
     await r2Client.send(copyCommand);
