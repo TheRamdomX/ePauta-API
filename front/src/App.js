@@ -72,9 +72,10 @@ function App() {
       const ruta = getRutaCompleta(curso);
       const res = await fetch(`${API_URL}/recursos/${ruta}`);
       const data = await res.json();
-      setArchivos(data || []);
+      setArchivos(Array.isArray(data) ? data : []);
     } catch (e) {
       alert('Error al consultar archivos');
+      setArchivos([]);
     }
     setCargando(false); 
   };
@@ -175,8 +176,11 @@ function App() {
       setArchivos([]);
       fetch(`${API_URL}/recursos/${ruta}`)
         .then(res => res.json())
-        .then(data => setArchivos(data || []))
-        .catch(() => alert('Error al consultar archivos'))
+        .then(data => setArchivos(Array.isArray(data) ? data : []))
+        .catch(() => {
+          alert('Error al consultar archivos');
+          setArchivos([]);
+        })
         .finally(() => setCargando(false));
     }, 100);
   };
@@ -289,7 +293,7 @@ function App() {
       </div>
       {cargando && <p>Cargando...</p>}
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {[...archivos]
+        {(Array.isArray(archivos) ? [...archivos] : [])
           .sort((a, b) => {
             const aEndsWithF = a.name.toLowerCase().endsWith('f');
             const bEndsWithF = b.name.toLowerCase().endsWith('f');
