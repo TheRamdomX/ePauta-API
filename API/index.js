@@ -30,9 +30,9 @@ app.get('/recursos/:ruta(*)', async (req, res) => {
     });
     
     const response = await r2Client.send(command);
-    const files = response.Contents || [];
-    
-    const data = files.map(f => ({ 
+    const files = (response.Contents || []).filter(f => !f.Key.endsWith('/'));
+
+    const data = files.map(f => ({
       name: f.Key.split('/').pop(), 
       path: f.Key,
       size: f.Size,

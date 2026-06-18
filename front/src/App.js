@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import ramos from './ramos.json';
+import ramosPorSeccion from './ramos.json';
+
+const SECCIONES = [
+  { key: 'eii', label: 'Ingeniería Industrial' },
+  { key: 'eit', label: 'Ingeniería Informática y Telecomunicaciones' },
+  { key: 'eoc', label: 'Ingeniería en Obras Civiles' },
+  { key: 'plan-comun', label: 'Plan Común' },
+];
+
+const ramos = SECCIONES.flatMap(s => ramosPorSeccion[s.key] || []);
 
 const API_URL = 'http://localhost:3001';
 
@@ -53,6 +62,8 @@ function App() {
   const [cargando, setCargando] = useState(false);
   const [seleccionados, setSeleccionados] = useState({});
   const [mostrarLista, setMostrarLista] = useState(false);
+  const [vista, setVista] = useState(null);
+  const [cargandoVista, setCargandoVista] = useState(false);
 
   // Buscar nombre del curso por código
   const nombreCurso = (() => {
@@ -62,7 +73,6 @@ function App() {
 
   // Obtener la carrera del curso actual
   const carreraActual = getCarrera(curso);
-  const rutaCompleta = getRutaCompleta(curso);
 
   // Consultar archivos del curso
   const consultarArchivos = async () => {
@@ -122,6 +132,38 @@ function App() {
     } else {
       alert('Error al descargar archivo');
     }
+  };
+
+  // Cerrar el visualizador y liberar el object URL si corresponde
+  const cerrarVista = () => {
+    if (vista && vista.url) window.URL.revokeObjectURL(vista.url);
+    setVista(null);
+  };
+
+  // Visualizar archivo en un modal (imágenes, PDF y texto se muestran inline)
+  const visualizarArchivo = async (nombre) => {
+    const ruta = getRutaCompleta(curso);
+    setCargandoVista(true);
+    try {
+      const res = await fetch(`${API_URL}/archivo/${ruta}/${nombre}`);
+      if (!res.ok) {
+        alert('Error al cargar archivo');
+        return;
+      }
+      const blob = await res.blob();
+      const tipo = blob.type || '';
+      if (vista && vista.url) window.URL.revokeObjectURL(vista.url);
+      if (tipo.startsWith('text/') || /\.(txt|csv|json|md)$/i.test(nombre)) {
+        const texto = await blob.text();
+        setVista({ nombre, tipo, texto });
+      } else {
+        const url = window.URL.createObjectURL(blob);
+        setVista({ nombre, tipo, url });
+      }
+    } catch (e) {
+      alert('Error al cargar archivo');
+    }
+    setCargandoVista(false);
   };
 
   // Renombrar archivos seleccionados
@@ -249,30 +291,37 @@ function App() {
           }}
         >
           <b>Todos los cursos (click en código para buscar):</b>
-          <ul style={{ columns: 2, margin: 0, padding: 0, listStyle: 'none' }}>
-            {ramos.map(r => (
-              <li key={r.codigo || r.nombre} style={{ marginBottom: 4 }}>
-                {r.codigo ? (
-                  <span
-                    onClick={() => seleccionarCurso(r.codigo)}
-                    style={{
-                      fontFamily: 'monospace',
-                      color: '#0066cc',
-                      cursor: 'pointer',
-                      textDecoration: 'underline',
-                      marginRight: 4,
-                    }}
-                    title={`Buscar archivos de ${r.codigo}`}
-                  >
-                    {r.codigo}
-                  </span>
-                ) : null}
-                <span style={{ color: '#333' }}>
-                  {r.codigo ? ' — ' : ''}{r.nombre}
-                </span>
-              </li>
-            ))}
-          </ul>
+          {SECCIONES.map(seccion => (
+            <div key={seccion.key} style={{ marginTop: 12 }}>
+              <div style={{ fontWeight: 'bold', color: '#444', marginBottom: 4 }}>
+                {seccion.label}
+              </div>
+              <ul style={{ columns: 2, margin: 0, padding: 0, listStyle: 'none' }}>
+                {(ramosPorSeccion[seccion.key] || []).map(r => (
+                  <li key={r.codigo || r.nombre} style={{ marginBottom: 4 }}>
+                    {r.codigo ? (
+                      <span
+                        onClick={() => seleccionarCurso(r.codigo)}
+                        style={{
+                          fontFamily: 'monospace',
+                          color: '#0066cc',
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                          marginRight: 4,
+                        }}
+                        title={`Buscar archivos de ${r.codigo}`}
+                      >
+                        {r.codigo}
+                      </span>
+                    ) : null}
+                    <span style={{ color: '#333' }}>
+                      {r.codigo ? ' — ' : ''}{r.nombre}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       )}
       {curso && (
@@ -340,6 +389,13 @@ function App() {
               </button>
               <button
                 style={{ marginLeft: 8 }}
+                disabled={cargandoVista}
+                onClick={() => visualizarArchivo(archivo.name)}
+              >
+                Ver
+              </button>
+              <button
+                style={{ marginLeft: 8 }}
                 onClick={() => descargarArchivo(archivo.name)}
               >
                 Descargar
@@ -371,6 +427,73 @@ function App() {
           />
         </label>
       </div>
+      {vista && (
+        <div
+          onClick={cerrarVista}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#fff',
+              borderRadius: 8,
+              width: '80vw',
+              height: '85vh',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 16px',
+                borderBottom: '1px solid #ddd',
+              }}
+            >
+              <b>{vista.nombre}</b>
+              <button onClick={cerrarVista}>Cerrar</button>
+            </div>
+            <div style={{ flex: 1, overflow: 'auto', padding: 16 }}>
+              {vista.texto !== undefined ? (
+                <pre style={{ whiteSpace: 'pre-wrap', margin: 0, fontFamily: 'monospace' }}>
+                  {vista.texto}
+                </pre>
+              ) : vista.tipo.startsWith('image/') ? (
+                <img
+                  src={vista.url}
+                  alt={vista.nombre}
+                  style={{ maxWidth: '100%', maxHeight: '100%', display: 'block', margin: '0 auto' }}
+                />
+              ) : vista.tipo === 'application/pdf' ? (
+                <iframe
+                  src={vista.url}
+                  title={vista.nombre}
+                  style={{ width: '100%', height: '100%', border: 'none' }}
+                />
+              ) : (
+                <div>
+                  <p>No se puede previsualizar este tipo de archivo ({vista.tipo || 'desconocido'}).</p>
+                  <button onClick={() => descargarArchivo(vista.nombre)}>Descargar</button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
