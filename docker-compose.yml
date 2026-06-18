@@ -1,0 +1,14 @@
+services:
+  api:
+    build: ./API
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./API/.env
+
+  front:
+    build: ./front
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
